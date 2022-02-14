@@ -3,21 +3,37 @@ import { connect } from "react-redux";
 import { ListGroup, ListGroupItem } from "reactstrap";
 import { bindActionCreators } from "redux";
 import * as categoryActions from "../../redux/actions/categoryActions";
+import { Badge } from "reactstrap";
+import * as productActions from "../../redux/actions/productActions";
 
 class CategoryList extends Component {
-  componentDidMount(){  // bunu yazmadığımda kategorinin 8 tane olduğunu göremedim
-    this.props.actions.getCategories()// buna neden ihtiyaç var iyi anla.
+  componentDidMount() {
+    // bunu yazmadığımda kategorinin 8 tane olduğunu göremedim
+    this.props.actions.getCategories(); // buna neden ihtiyaç var iyi anla.
   }
+
+  selectCategory = (category) => {
+    this.props.actions.changeCategory(category);
+    this.props.actions.getProducts(category.id)
+  };
+
   render() {
     return (
       <div>
-        <h3>Category List  </h3>
+        <Badge color="warning">
+          <h5>Category List</h5>
+        </Badge>{" "}
         <ListGroup>
           {this.props.categories.map((category) => (
-            <ListGroupItem key={category.id}>{category.name}</ListGroupItem>
+            <ListGroupItem
+              active={category.id === this.props.currentCategory.id}
+              onClick={() => this.selectCategory(category)}
+              key={category.id}
+            >
+              {category.name}
+            </ListGroupItem>
           ))}
         </ListGroup>
-        <h5>Seçili Kategori : {this.props.currentCategory.name}</h5>
       </div>
     );
   }
@@ -38,6 +54,11 @@ function mapDispatchToProps(dispatch) {
         categoryActions.getCategories,
         dispatch
       ),
+      changeCategory: bindActionCreators(
+        categoryActions.changeCategory,
+        dispatch
+      ),
+      getProducts: bindActionCreators(productActions.getProducts, dispatch),
     },
   };
 }
