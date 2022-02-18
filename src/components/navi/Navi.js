@@ -1,49 +1,49 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {
   Navbar,
   NavLink,
   NavItem,
   NavbarToggler,
-  NavbarText,
   Nav,
   NavbarBrand,
   Collapse,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
+  Button,
 } from "reactstrap";
+import CartSummary from "../cart/CartSummary";
 
 export default class Navi extends Component {
   render() {
     return (
       <div>
-        <Navbar color="light" expand="md" light>
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
+        <Navbar
+          color="dark"
+          className="navbar-dark navbar-expand-md"
+          style={{
+            borderRadius: "10px",
+            marginBottom: "20px",
+          }}
+        >
+          <NavbarBrand>
+            <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+              Sepet Uygulaması
+            </Link>
+          </NavbarBrand>
           <NavbarToggler onClick={function noRefCheck() {}} />
           <Collapse navbar>
-            <Nav className="me-auto" navbar>
+            <Nav className="ms-auto" navbar>
               <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">
-                  GitHub
+                <NavLink>
+                  <Link
+                    to="/saveproduct"
+                    style={{ textDecoration: "none", color: "white" }}
+                  >
+                    Ürün Ekle{" "}
+                  </Link>
                 </NavLink>
               </NavItem>
-              <UncontrolledDropdown inNavbar nav>
-                <DropdownToggle caret nav>
-                  Options
-                </DropdownToggle>
-                <DropdownMenu end>
-                  <DropdownItem>Option 1</DropdownItem>
-                  <DropdownItem>Option 2</DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>Reset</DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
+              <CartSummary />
             </Nav>
-            <NavbarText>Simple Text</NavbarText>
           </Collapse>
         </Navbar>
       </div>

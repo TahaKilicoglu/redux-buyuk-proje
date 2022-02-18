@@ -1,20 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Badge,Table } from "reactstrap";
+import { Badge, Table, Button } from "reactstrap";
 import { bindActionCreators } from "redux";
 import * as productActions from "../../redux/actions/productActions";
+import * as cartActions from "../../redux/actions/cartActions";
+import alertify from "alertifyjs";
+import { Link } from "react-router-dom";
 
 class ProductList extends Component {
   componentDidMount() {
     // uygulama açıldığında getPorducts ı çağırıyoruz.
     this.props.actions.getProducts();
   }
+  addToCart = (product) => {
+    this.props.actions.addToCart({ quantity: 1, product });
+    alertify.success(product.name + " Sepete Eklendi");
+  };
 
   render() {
     return (
       <div>
         <Badge color="warning">
-          <h5>Product List</h5>
+          <h5 style={{ color: "black" }}>Product List</h5>
         </Badge>
         <Badge color="success">
           <h5>{this.props.currentCategory.name}</h5>
@@ -27,19 +34,29 @@ class ProductList extends Component {
               <th>Unit Price</th>
               <th>Quantity Per Unit</th>
               <th>Unit In Stock</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {this.props.products.map(product=>(
-                 <tr>
-              <th scope="row">{product.id}</th>
-              <td>{product.name}</td>
-              <td>{product.unitPrice}</td>
-              <td>{product.quantityPerUnit}</td>
-              <td>{product.unitsInStock}</td>
-            </tr>
+            {this.props.products.map((product) => (
+              <tr key={product.id}>
+                <th scope="row">{product.id}</th>
+                <td>
+                  <Link to={"/saveproduct/" + product.id}>{product.name}</Link>
+                </td>
+                <td>{product.unitPrice}</td>
+                <td>{product.quantityPerUnit}</td>
+                <td>{product.unitsInStock}</td>
+                <td>
+                  <Button
+                    color="success"
+                    onClick={() => this.addToCart(product)}
+                  >
+                    Ekle
+                  </Button>
+                </td>
+              </tr>
             ))}
-         
           </tbody>
         </Table>
       </div>
@@ -59,6 +76,7 @@ function mapDispatchToProps(dispatch) {
   return {
     actions: {
       getProducts: bindActionCreators(productActions.getProducts, dispatch),
+      addToCart: bindActionCreators(cartActions.addToCart, dispatch),
     },
   };
 }

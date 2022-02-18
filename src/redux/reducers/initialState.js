@@ -1,5 +1,7 @@
 export default {
-    currentCategory:{categoryName:"Bevarages"},
+    currentCategory:{},
     categories: [], // obje değil array içerisinde birden fazla kategori var
-    products:[]
+    products:[],
+    cart:[],
+    savedProduct:{}
 }
